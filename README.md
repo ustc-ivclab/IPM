@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Partition Map-Based Fast Block Partitioning for VVC Interframe Coding</h1>
+<h1>Partition Map-Based Fast Block Partitioning for VVC Inter Coding</h1>
 
 <div>
     <a href='https://zhexinliang.github.io/' target='_blank'>Xinmin Feng</a>&emsp;
