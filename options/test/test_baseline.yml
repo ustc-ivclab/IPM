@@ -43,15 +43,15 @@ datasets:
   test_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
 path:
-  sintel_spynet_path: /model/fengxm/pmp_model/pretrained_model/spynet_sintel_final.pth
-  me_model_dir: /model/fengxm/pmp_model/pretrained_model/ME/best_78/
-  light_me_model_dir: /model/fengxm/pmp_model/pretrained_model/ME_light/best_110/
+  sintel_spynet_path: ~
+  me_model_dir: /model/fengxm/IPM/spynet/pretrained_models/best_78/
+  light_me_model_dir: ~
   tid_finetune: False
-  test_seq_dir: /data/fengxm/pmp_dataset/test_sequences/
-  cfg_path: /data/fengxm/pmp_dataset/log/cfg
-  qt_large_model_path: /model/fengxm/pmp_model/chk/qt/large
-  qt_model_path: /model/fengxm/pmp_model/chk/qt/base315
-  mtt_mask_model_path: /model/fengxm/pmp_model/chk/baseline/mtt_mask
-  mtt_model_path: /model/fengxm/pmp_model/chk/baseline/mtt_depth
-  dire_model_path: /model/fengxm/pmp_model/chk/baseline/mtt_dire
+  test_seq_dir: /data/fengxm/IPM/test_sequences/
+  cfg_path: /data/fengxm/IPM/cfg/per-sequence
+  qt_large_model_path: /model/fengxm/IPM/checkponts/Large
+  qt_model_path: /model/fengxm/IPM/checkpoints/chk/base315
+  mtt_mask_model_path: /model/fengxm/IPM/checkpoints/base315/mtt_mask
+  mtt_model_path: /model/fengxm/pmp_model/checkpoints/base315/mtt_depth
+  dire_model_path: /model/fengxm/pmp_model/checkpoints/base315/mtt_dire
   qt_candidate_path: ~
