@@ -117,16 +117,27 @@ The acceleration configurations for different acceleration levels are as follows
 
 | Macro                            | $L_0(0,1)$ | $L_0(0.2,1)$ | $L_0(0.2,0.9)$ |
 |-----------------------------------|------------|--------------|----------------|
-| INTER_PARTITION_MAP_ACCELERATION_FXM | 1          | 1            | 1              |
-| Acceleration_Config_fxm           | 0          | 0            | 1              |
-| boundary_handling_fxm             | 1          | 1            | 1              |
-| Mtt_mask_fxm                      | 0          | 1            | 1              |
-| mtt_mask_thd                      | 0          | 20           | 20             |
-| mtt_rdo_thd                       | 100        | 100          | 90             |
+| `INTER_PARTITION_MAP_ACCELERATION_FXM` | 1          | 1            | 1              |
+| `Acceleration_Config_fxm`           | 0          | 0            | 1              |
+| `boundary_handling_fxm`             | 1          | 1            | 1              |
+| `Mtt_mask_fxm`                      | 0          | 1            | 1              |
+| `mtt_mask_thd`                      | 0          | 20           | 20             |
+| `mtt_rdo_thd`                       | 100        | 100          | 90             |
 
 In addition, we also provide a combination of the proposed method and previous work [1], where the former accelerates B-frames and the latter accelerates I-frames. This corresponds to `inter_intra_fast/VTM10_L0i_0_100.exe`, `inter_intra_fast/VTM10_L0i_20_100.exe`, and `inter_intra_fast/VTM10_L1i_20_90.exe`.
 
+You can use the following command to run the encoder and accelerate B-frames, where `el` represents the path to the partition flags of B-frames, and `ip` represents the intra period.
 
+```bash
+VTM10_L1_20_90.exe -el D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_gop16\\BasketballDrive_1920x1080_50_Luma_QP22_PartitionMat.txt -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\cfg\\encoder_randomaccess_vtm.cfg -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\cfg\\per-sequence\\BasketballDrive.cfg -i D:\\VVC_test\\BasketballDrive_1920x1080_50.yuv  -q 22 -f 65 -ip 48 -b res_L0.bin
+```
+Alternatively, you can use the following command to accelerate both B-frames and I-frames. In this case, `ac` and `al` represent the paths to the partition flags for the I-frame Luma components and chroma components, respectively.
+
+```bash
+VTM10_L1_20_90.exe -el PartitionFlags -ac D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_gop16\\BasketballDrive_1920x1080_50_Luma_QP22_PartitionMat.txt -al D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_intra\\RitualDance_1920x1080_60fps_10bit_420_Luma_QP22_PartitionMat_intra.txt  -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\VVCSoftware_VTM-VTM-10.0-fast\\cfg\\encoder_randomaccess_vtm.cfg -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\VVCSoftware_VTM-VTM-10.0-fast\\cfg\\per-sequence\\RitualDance.cfg -i E:\\VVC_test\\RitualDance_1920x1080_60fps_10bit_420.yuv  -q 22 -f 65 -ip 64 -b res_L0.bin
+```
+
+We provide partition flags for 22 VVC CTC sequences in GOP16 and GOP32 on [Baidu Cloud](https://pan.baidu.com/s/1STnEpLJmxiVV8AoA3hptRA?pwd=dddr). You can download these files and replace the `el`, `ac`, and `al` paths above to reproduce our results without invoking model.
 
 
 
