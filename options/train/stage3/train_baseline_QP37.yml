@@ -1,0 +1,78 @@
+name: train_baseline_stage2
+depth_model: True
+dire_model: False
+gpu_num:  4
+enc_mode: RA
+qp: 37
+model_type: stage3_w_DLM_depth  # cp_path
+flow_type: DAM   # options: XYD(X/Y Displacement), DAM(Direction/Angle of Motion)
+ds: 2
+
+#logger
+log:
+  use_tensor_board: True
+
+#datasets
+datasets:
+  train:
+     batchSize: 4
+     num_workers: 8
+     pin_memory: True
+
+  val:
+    use_valid: True
+    batchSize: 1
+    valid_id: B
+
+# networks
+network:
+  model_type: depth  # depth or direction
+  mtt_mask_dlm: True
+  residual_type: dyloc  # warp, res
+  large_qt_model: True
+  text_fe: True
+  qml: True  # qp modulation layers
+  tml: False
+  spp: False
+
+#train
+train:
+  mask_ratio: [0.12, 0.75, 1.0]  # mask ratio for A,B,C
+  focal_loss: [True, True, True]
+  open_alpha: True # close alpha of focal loss
+  min_ratio: [0.1, 0.1, 0.1]
+  focal_gamma: [0, 0, 0]
+
+  mtt_mask_weight: False
+  crop_A: False  # crop class A to class B
+  random_flip: False
+  paired: False
+  repeat_dataset: False  # repeat training dataset
+  max_layer_depth: 4  # max layer depth predicted (qt only = 1, qt + mtt0 = 2)
+  load_uv: False # whether load uv component or not
+  resample: False # resample frames based on TID
+  sub_epoch: [500, 300, 300, 200] # stage1 and stage2
+  resolution: ['A', 'A', 'A', 'A', 'B', 'B', 'B', 'C', 'C', ]
+
+  warmup: False
+  init_stage: 2  # means mtt-depth net
+  lr: !!float 1e-3
+  gamma: !!float 0.98
+
+  mtt_layer_weight: [1, 1, 1]
+  mtt_z_nz_weight: [1, 1, 1]
+  qt_mtt_weight: [1, 1]
+
+#path
+path:
+  pretrained_path: ~
+  pretrained_dire_path: ~
+  qt_model_path: /ghome/fengxm/VVC_LAST/checkpoints/qt_net
+  mtt_mask_model_path: /ghome/fengxm/VVC_LAST/checkpoints/mtt_mask_net/w_DLM
+  large_qt_model_path: /ghome/fengxm/VVC_LAST/checkpoints/qt_net_large
+
+
+  train_dataset_dir: /gdata2/fengxm/pmp_dataset/
+  cp_path: /gdata2/fengxm/models/baseline_guide/
+  me_model_dir: /ghome/fengxm/VVC_LAST/spynet/pretrained_models/best_78/
+

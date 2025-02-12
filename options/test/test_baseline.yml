@@ -1,0 +1,57 @@
+name: test_baseline
+qp: ~
+gpu_num: 1
+vis_mode: False
+enc_mode: RA
+model_type: wo_gcnn  # options: f65_gop16_HEVCB_all
+flow_type: DAM   # options: XYD(X/Y Displacement), DAM(Direction/Angle of Motion)
+open_mtt: False
+dire_model: True
+boundary_handling: True  # open boundary handling
+crop_A: False
+stage: 5  # 1,2,3,4,5 means qt, mt_mask, mt0, mt1, mt2
+acc_level: 3  # 1, 2, 3 three points
+thread_num: 8  # post-algorithm's threads
+show_mtt_mask: True
+open_offset: False
+offset: [[0.1, 0.3, 0.3], [0.1, 0.3, 0.3], [0.1, 0.3, 0.3], [0.1, 0.3, 0.3]]
+encode_cfg: f65_gop16
+
+network:
+  residual_type: dyloc
+  mtt_mask_dlm: True
+  light_spynet: False
+  large_model: [True, True, True, True]
+  qml: True # qp modulation layer
+  tml: False
+  hgl_qt: True  # stacked hourglass qt net
+  hgl_mtt: False
+  max_layer_depth: 1  # 1 means qt only, 2 means qt + mtt0, None means all depth
+  spp: False # True: qtmtt_hgl_wospp, False: qtmtt_hgl
+
+module:
+  infe_on_PC: True
+  save_out_batch: False
+  metric: False
+  metric_path: /data/fengxm/pmp_dataset/test_dataset
+  recon_unconsist: False
+
+datasets:
+  batchSize: 1
+  num_workers: 2
+  yuv: False
+  test_ids: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+
+path:
+  sintel_spynet_path: /model/fengxm/pmp_model/pretrained_model/spynet_sintel_final.pth
+  me_model_dir: /model/fengxm/pmp_model/pretrained_model/ME/best_78/
+  light_me_model_dir: /model/fengxm/pmp_model/pretrained_model/ME_light/best_110/
+  tid_finetune: False
+  test_seq_dir: /data/fengxm/pmp_dataset/test_sequences/
+  cfg_path: /data/fengxm/pmp_dataset/log/cfg
+  qt_large_model_path: /model/fengxm/pmp_model/chk/qt/large
+  qt_model_path: /model/fengxm/pmp_model/chk/qt/base315
+  mtt_mask_model_path: /model/fengxm/pmp_model/chk/baseline/mtt_mask
+  mtt_model_path: /model/fengxm/pmp_model/chk/baseline/mtt_depth
+  dire_model_path: /model/fengxm/pmp_model/chk/baseline/mtt_dire
+  qt_candidate_path: ~

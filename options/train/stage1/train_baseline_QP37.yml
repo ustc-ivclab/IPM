@@ -1,0 +1,67 @@
+name: train_baseline_stage1
+depth_model: True
+dire_model: False
+gpu_num:  4
+enc_mode: RA
+qp: 37
+model_type: stage1
+flow_type: DAM   
+ds: 1
+
+#logger
+log:
+  use_tensor_board: True
+
+#datasets
+datasets:
+  train:
+     batchSize: 80
+     num_workers: 10
+     pin_memory: True
+
+  val:
+    use_valid: True
+    batchSize: 8
+    valid_id: B
+
+# networks
+network:
+  wo_op: False
+  text_fe: False
+  qml: True  # qp modulation layers
+  tml: False
+  spp: False
+
+#train
+train:
+  multi_loss: True
+  crop_A: False  # crop class A to class B
+  random_flip: True
+  paired: False
+  repeat_dataset: False  # repeat training dataset
+  max_layer_depth: 1  # max layer depth predicted (qt only = 1, qt + mtt0 = 2)
+  load_uv: False # whether load uv component or not
+  resample: True # resample frames based on TID
+  sub_epoch: [500, 150, 200, 200] # stage1 and stage2
+  resolution: ['B', 'A', 'C']
+  init_stage: 0
+  lr: !!float 0.001
+  gamma: !!float 0.98
+  warmup: True
+
+  mtt_layer_weight: [1, 1, 1]
+  mtt_z_nz_weight: [1, 1, 1]
+
+  qt_mtt_weight: [1, 1]
+  qt_nz_weight: ~  # weight for qt_label=1,2,3
+  qt_nz_weight_C: ~
+  qt_nz_weight_A: ~
+
+#path
+path:
+  pretrained_path: ~
+  pretrained_dire_path: ~
+  train_dataset_dir: /gdata2/fengxm/pmp_dataset/
+  cp_path: /gdata2/fengxm/models/baseline_guide/
+  me_model_dir: /ghome/fengxm/VVC_LAST/spynet/pretrained_models/best_78/
+

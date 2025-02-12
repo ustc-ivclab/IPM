@@ -1,0 +1,62 @@
+name: train_baseline_stage2
+depth_model: True
+dire_model: False
+gpu_num:  4
+enc_mode: RA
+qp: 22
+model_type: stage2  
+flow_type: DAM 
+ds: 2
+
+#logger
+log:
+  use_tensor_board: True
+
+#datasets
+datasets:
+  train:
+     batchSize: 60
+     num_workers: 8
+     pin_memory: True
+
+  val:
+    use_valid: True
+    batchSize: 16
+    valid_id: B
+
+# networks
+network:
+  qml: True  
+  tml: False
+  spp: False
+
+#train
+train:
+  mtt_mask_weight: True
+  crop_A: False  # crop class A to class B
+  random_flip: False
+  paired: False
+  repeat_dataset: False  # repeat training dataset
+  max_layer_depth: 1  # max layer depth predicted (qt only = 1, qt + mtt0 = 2)
+  load_uv: False # whether load uv component or not
+  resample: True # resample frames based on TID
+  sub_epoch: [500, 300, 200, 200] # stage1 and stage2
+  resolution: ['A','B','C'] 
+  warmup: True
+  init_stage: 1  # means mtt-mask net
+  lr: !!float 0.001
+  gamma: !!float 0.98
+
+  mtt_mask_nz_weight: ~ 
+  # useless
+  mtt_layer_weight: [1, 1, 1]
+  mtt_z_nz_weight: [1, 1, 1]
+  qt_mtt_weight: [1, 1]
+
+path:
+  qt_model_path: checkpoints/baseline
+  pretrained_path: ~
+  pretrained_dire_path: ~
+  train_dataset_dir: /gdata2/fengxm/pmp_dataset/
+  cp_path: /gdata2/fengxm/models/baseline_guide/
+  me_model_dir: /ghome/fengxm/VVC_LAST/spynet/pretrained_models/best_78/
