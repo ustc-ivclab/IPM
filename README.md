@@ -28,9 +28,11 @@
 
 - [Training Dataset](#training-dataset)
 - [Installation of Dependencies](#installation-of-dependencies)
-<!-- - [Quickstart](#quickstart) -->
-<!-- - [Network Inference and Post-processing](#network-inference-and-post-processing) -->
 - [Modified VTM Encoder](#modified-vtm-encoder)
+- [Network Inference and Post-processing](#network-inference-and-post-processing)
+- [Performance](#performance)
+
+<!-- - [Quickstart](#quickstart) -->
 
 ## Training Dataset
 
@@ -57,38 +59,6 @@ The base image is `pytorch:2.0.0-cuda11.7-cudnn8-runtime`. To install the depend
 ```bash
 pip install einops matplotlib tensorboard timm ipykernel h5py thop openpyxl palettable -i https://mirrors.aliyun.com/pypi/simple/
 ```
-
-<!-- ## QuickStart
-
-Here, we provide the post-processing partition decisions, and you can use the following commands to accelerate encoding of VTM test sequences without the need for complicated configurations. We test the first 65 frames to ensure a complete intra period for high-frame-rate videos.
-
-For VTM 10 with GOP size of 16
-
-```bash
-
-```
-
-For VTM 10 with GOP size of 32
-
-```bash
-
-```
-
-For VTM 23 with GOP size of 32
-
-```bash
-
-```
-
-
-
-
-## Network Inference and Post-Processing
-
-To obtain the partition decision files for accelerating the VTM encoder, we need to process the uncompressed raw sequence using a network, and apply the post-processing algorithm to generate a `.txt` file for VTM processing.
- -->
-
-
 
 
 ## Modified VTM Encoder
@@ -134,7 +104,7 @@ VTM10_L1_20_90.exe -el D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_gop16\\Bas
 Alternatively, you can use the following command to accelerate both B-frames and I-frames. In this case, `ac` and `al` represent the paths to the partition flags for the I-frame Luma components and chroma components, respectively.
 
 ```bash
-VTM10_L1_20_90.exe -el PartitionFlags -ac D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_gop16\\BasketballDrive_1920x1080_50_Luma_QP22_PartitionMat.txt -al D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_intra\\RitualDance_1920x1080_60fps_10bit_420_Luma_QP22_PartitionMat_intra.txt  -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\VVCSoftware_VTM-VTM-10.0-fast\\cfg\\encoder_randomaccess_vtm.cfg -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\VVCSoftware_VTM-VTM-10.0-fast\\cfg\\per-sequence\\RitualDance.cfg -i E:\\VVC_test\\RitualDance_1920x1080_60fps_10bit_420.yuv  -q 22 -f 65 -ip 64 -b res_L0.bin
+VTM10_L1_20_90.exe -el D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_gop16\\BasketballDrive_1920x1080_50_Luma_QP22_PartitionMat.txt -ac D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_gop16\\BasketballDrive_1920x1080_50_Luma_QP22_PartitionMat.txt -al D:\\PartitionMat\\f65_intra\\PartitionMat\\f65_intra\\RitualDance_1920x1080_60fps_10bit_420_Luma_QP22_PartitionMat_intra.txt  -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\VVCSoftware_VTM-VTM-10.0-fast\\cfg\\encoder_randomaccess_vtm.cfg -c D:\\VTM\\VVCSoftware_VTM-VTM-10.0\\VVCSoftware_VTM-VTM-10.0-fast\\cfg\\per-sequence\\RitualDance.cfg -i E:\\VVC_test\\RitualDance_1920x1080_60fps_10bit_420.yuv  -q 22 -f 65 -ip 64 -b res_L0.bin
 ```
 
 We provide partition flags for 22 VVC CTC sequences in GOP16 and GOP32 on [Baidu Cloud](https://pan.baidu.com/s/1STnEpLJmxiVV8AoA3hptRA?pwd=dddr). You can download these files and replace the `el`, `ac`, and `al` paths above to reproduce our results without invoking model.
@@ -142,6 +112,18 @@ We provide partition flags for 22 VVC CTC sequences in GOP16 and GOP32 on [Baidu
 
 
 <!-- ## :running_woman: TODO  -->
+
+## Network Inference and Post-Processing
+
+To obtain the partition flags for accelerating the modified VTM encoder, we process the raw sequence using the proposed neural network, and apply the post-processing algorithm to generate the text file for modified VTM encoder.
+
+
+
+
+## Performance
+
+![Comparison with Related Methods.](./Figure/RDTA.png)
+
 
 ## References
 
