@@ -25,9 +25,16 @@
 
 </div>
 
+
+- [Training Dataset](#training-dataset)
+- [Installation of Dependencies](#installation-of-dependencies)
+<!-- - [Quickstart](#quickstart) -->
+<!-- - [Network Inference and Post-processing](#network-inference-and-post-processing) -->
+- [Modified VTM Encoder](#modified-vtm-encoder)
+
 ## Training Dataset
 
-The training dataset is available at [Baidu Cloud](https://pan.baidu.com/s/1ZMPZqOcQS_gri_pzSq2vGA?pwd=tmxn). We used 668 4K sequences with 32 frames from the BVI-DVC dataset, Tencent Video Dataset, and UVG dataset. These sequences were cropped or downsampled to create datasets with four different resolutions: 3840x2160, 1920x1080, 960x544, and 480x272. We organized the training dataset using HDF5 format, which includes the following files:
+The training dataset is available at [Baidu Cloud](https://pan.baidu.com/s/1ZMPZqOcQS_gri_pzSq2vGA?pwd=tmxn). We used 668 4K sequences with 32 frames from the [BVI-DVC](https://fan-aaron-zhang.github.io/BVI-DVC/) dataset, Tencent Video Dataset / [TVD](https://multimedia.tencent.com/resources/tvd/), and [UVG](https://github.com/ultravideo/UVG-4K-Dataset/) dataset. These sequences were cropped or downsampled to create datasets with four different resolutions: 3840x2160, 1920x1080, 960x544, and 480x272. We organized the training dataset using HDF5 format, which includes the following files:
 
 - `train_seqs.h5`: Luma components of the original sequences.
 - `train_qp22.h5`: Training dataset label for basic QP22.
@@ -41,6 +48,85 @@ To further support subsequent research, we also provide the code for generating 
 3. Code `depth2dataset.py` for converting the  statistics into partition maps.
 
 
+## Installation of Dependencies
+
+In order to explore this project, it is needed to first install the libraries used in it.
+
+The base image is `pytorch:2.0.0-cuda11.7-cudnn8-runtime`. To install the dependencies, use the following command:
+
+```bash
+pip install einops matplotlib tensorboard timm ipykernel h5py thop openpyxl palettable -i https://mirrors.aliyun.com/pypi/simple/
+```
+
+<!-- ## QuickStart
+
+Here, we provide the post-processing partition decisions, and you can use the following commands to accelerate encoding of VTM test sequences without the need for complicated configurations. We test the first 65 frames to ensure a complete intra period for high-frame-rate videos.
+
+For VTM 10 with GOP size of 16
+
+```bash
+
+```
+
+For VTM 10 with GOP size of 32
+
+```bash
+
+```
+
+For VTM 23 with GOP size of 32
+
+```bash
+
+```
+
+
+
+
+## Network Inference and Post-Processing
+
+To obtain the partition decision files for accelerating the VTM encoder, we need to process the uncompressed raw sequence using a network, and apply the post-processing algorithm to generate a `.txt` file for VTM processing.
+ -->
+
+
+
+
+## Modified VTM Encoder
+
+We provide the source code for the VTM 10.0 and 23.0 encoder with integrated fast algorithms in the folder `codec/source_code/inter_fast`, and the corresponding executable files for different acceleration levels in `codec/exe`. Specifically, `inter_fast` corresponds to acceleration for B-frames only, while `inter_intra_fast` uses the proposed method to accelerate B-frames and uses the method from [1] to accelerate I-frames.
+
+To implement different acceleration levels, you can modify the parameters in `TypeDef.h`. For example, for the acceleration level $L_1(0.2,0.9)$, and the configuration for accelerating I-frames is as follows:
+
+```C++
+// Fast block partitioning for VVC inter coding
+#define   INTER_PARTITION_MAP_ACCELERATION_FXM      1  // Accelerating B-frames, True: 1, False: 0
+#define   Acceleration_Config_fxm                   1  // Acceleration level, options: 0, 1, 2, 3
+#define   boundary_handling_fxm                     1  // Boundary handling based on granularity
+#define   Mtt_mask_fxm                              1  // If config=0 and mtt_mask=1, the uncovered parts of the mtt mask are decided by RDO. If config>=1 and mtt_mask=1, the uncovered parts are decided by the network
+#define   mtt_mask_thd                              20 // MTT mask threshold, true threshold = threshold / 100
+#define   mtt_rdo_thd                               90 // MTT RDO threshold. Blocks with values below this will skip MTT fast partitioning
+
+// Fast block partitioning for VVC intra coding
+#define   INTRA_PARTITION_MAP_ACCELERATION_FAL      1  // Accelerating I-frames, True: 1, False: 0
+#if INTRA_PARTITION_MAP_ACCELERATION_FAL
+#define   Acceleration_Config_fal_intra             1  // 4 configuration options (0, 1, 2, 3)
+#endif
+```
+
+The acceleration configurations for different acceleration levels are as follows, , corresponding to `inter_fast/VTM10_L0_0_100.exe`, `inter_fast/VTM10_L0_20_100.exe`, and `inter_fast/VTM10_L1_20_90.exe`.
+
+| Macro                            | $L_0(0,1)$ | $L_0(0.2,1)$ | $L_0(0.2,0.9)$ |
+|-----------------------------------|------------|--------------|----------------|
+| INTER_PARTITION_MAP_ACCELERATION_FXM | 1          | 1            | 1              |
+| Acceleration_Config_fxm           | 0          | 0            | 1              |
+| boundary_handling_fxm             | 1          | 1            | 1              |
+| Mtt_mask_fxm                      | 0          | 1            | 1              |
+| mtt_mask_thd                      | 0          | 20           | 20             |
+| mtt_rdo_thd                       | 100        | 100          | 90             |
+
+In addition, we also provide a combination of the proposed method and previous work [1], where the former accelerates B-frames and the latter accelerates I-frames. This corresponds to `inter_intra_fast/VTM10_L0i_0_100.exe`, `inter_intra_fast/VTM10_L0i_20_100.exe`, and `inter_intra_fast/VTM10_L1i_20_90.exe`.
+
+
 
 
 
@@ -49,5 +135,3 @@ To further support subsequent research, we also provide the code for generating 
 ## References
 
 1. [Partition Map Prediction for Fast Block Partitioning in VVC Intra-frame Coding](https://github.com/AolinFeng/PMP-VVC-TIP2023)
-
-2. 
