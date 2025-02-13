@@ -34,7 +34,7 @@
 
 <!-- - [Quickstart](#quickstart) -->
 
-## Training Dataset
+##  :open_book: Training Dataset
 
 The training dataset is available at [Baidu Cloud](https://pan.baidu.com/s/1ZMPZqOcQS_gri_pzSq2vGA?pwd=tmxn). We used 668 4K sequences with 32 frames from the [BVI-DVC](https://fan-aaron-zhang.github.io/BVI-DVC/) dataset, Tencent Video Dataset / [TVD](https://multimedia.tencent.com/resources/tvd/), and [UVG](https://github.com/ultravideo/UVG-4K-Dataset/) dataset. These sequences were cropped or downsampled to create datasets with four different resolutions: 3840x2160, 1920x1080, 960x544, and 480x272. We organized the training dataset using HDF5 format, which includes the following files:
 
@@ -50,7 +50,7 @@ To further support subsequent research, we also provide the code for generating 
 3. Code `depth2dataset.py` for converting the  statistics into partition maps.
 
 
-## Installation of Dependencies
+## :wrench: Installation of Dependencies
 
 In order to explore this project, it is needed to first install the libraries used in it.
 
@@ -61,7 +61,7 @@ pip install einops matplotlib tensorboard timm ipykernel h5py thop openpyxl pale
 ```
 
 
-## Modified VTM Encoder
+## :gear: Modified VTM Encoder
 
 We provide the source code for the VTM 10.0 and 23.0 encoder with integrated fast algorithms in the folder `codec/source_code/inter_fast`, and the corresponding executable files for different acceleration levels in `codec/exe`. Specifically, `inter_fast` corresponds to acceleration for B-frames only, while `inter_intra_fast` uses the proposed method to accelerate B-frames and uses the method from [1] to accelerate I-frames.
 
@@ -113,16 +113,17 @@ We provide partition flags for 22 VVC CTC sequences in GOP16 and GOP32 on [Baidu
 
 
 
-## Network Inference and Post-Processing
+## :electric_plug: Network Inference and Post-Processing
 
 To obtain the partition flags for accelerating the modified VTM encoder, we process the raw sequence using the proposed neural network, and apply the post-processing algorithm to generate the text file for modified VTM encoder.
 
 
 ## :running_woman: TODO 
 
-- [ ] Complete the code for neural network inference.
+- [ ] Update the code for neural network inference.
+- [ ] Update the code for training models.
 
-## Performance
+## :chart_with_upwards_trend: Performance
 
 ![Comparison with Related Methods.](./Figure/RDTA.png)
 
