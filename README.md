@@ -113,7 +113,7 @@ We provide partition flags for 22 VVC CTC sequences in GOP16 and GOP32 on [Baidu
 
 
 
-## :electric_plug: Network Inference and Post-Processing
+## :brain: Network Inference and Post-Processing
 
 To obtain the partition flags for accelerating the modified VTM encoder, we process the raw sequence using the proposed neural network, and apply the post-processing algorithm to generate the text file for modified VTM encoder.
 
@@ -126,6 +126,11 @@ To obtain the partition flags for accelerating the modified VTM encoder, we proc
 ## :chart_with_upwards_trend: Performance
 
 ![Comparison with Related Methods.](./Figure/RDTA.png)
+
+
+## :bust_in_silhouette: Ackownledgement
+
+We acknowledge the support of GPU and HPC cluster built by MCC Lab of Information Science and Technology Institution, USTC.
 
 
 ## References
